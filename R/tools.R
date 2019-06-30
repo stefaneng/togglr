@@ -1,21 +1,21 @@
 #' get_toggl_api_token
 #' @description  return the toggle api token
 #' @param ask booleen do we have to ask if missing
-#' @importFrom magrittr %>% 
+#' @importFrom magrittr %>%
 #' @importFrom  keyring key_set_with_value
 #' @import keyring
 #' @export
 get_toggl_api_token <- function(ask=TRUE){
   token <-NULL
-  
+
   try(token<-key_get(service = "toggl_api_token"),silent=TRUE)
-  
-  
+
+
   if ( is.null(token) & ask){
     delete_toggl_api_token()
-    token <- ask_toggl_api_token() 
+    token <- ask_toggl_api_token()
     token %>% key_set_with_value(service = "toggl_api_token",password = .)
-    
+
   }
   token
 }
@@ -24,27 +24,27 @@ get_toggl_api_token <- function(ask=TRUE){
 #' set_toggl_api_token
 #' @description  set the toggle api token
 #' @param token toggl api token
-#' @importFrom magrittr %>% 
+#' @importFrom magrittr %>%
 #' @import assertthat
 #' @export
 set_toggl_api_token <- function(token){
 
-  
+
   if ( missing(token) ){
-    token <- ask_toggl_api_token() 
+    token <- ask_toggl_api_token()
   }
   if (is.null(token)){return(invisible(NULL))}
-  
+
   delete_toggl_api_token()
   assert_that(is.character(token))
     token %>% key_set_with_value(service = "toggl_api_token",password = .)
-  
+
   token
 }
 
 #' update_toggl_api_token
 #' @description  update the toggle api token
-#' @importFrom magrittr %>% 
+#' @importFrom magrittr %>%
 #' @export
 update_toggl_api_token <- function(){
   delete_toggl_api_token()
@@ -64,7 +64,7 @@ delete_toggl_api_token <- function(){
 #' @description  ask for the toggle api token
 #' @import getPass
 #' @export
-ask_toggl_api_token <- function (msg="toggl api token") 
+ask_toggl_api_token <- function (msg="toggl api token")
 {
   passwd <- tryCatch({
     newpass <- getPass::getPass(msg)
